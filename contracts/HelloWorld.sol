@@ -1,11 +1,31 @@
 pragma solidity ^0.4.4;
 contract HelloWorld {
-    uint public balances;
     
-    //construction function
+    address public owner;
+    mapping(address => uint) balances;
+
+    //constructor function
     //run only once upon contract deployment
 
     function HelloWorld() {
-       balances = 1000;
+        owner=msg.sender;
+        balances[owner] = 1000;
+    
     }
+
+    function transfer(address _to, uint _value) returns (bool tx_state){
+
+        if (balances[msg.sender] < _value) {
+            return false;
+        }
+
+        balances[msg.sender] -= _value;
+        balances[_to] += _value;
+        return true;
+    }
+
+    function getBalance(address _user) constant returns (uint _balance) {
+        return balances[_user];
+    }
+
 }
